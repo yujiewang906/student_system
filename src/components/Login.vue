@@ -139,7 +139,7 @@
                         //如果token值不为空   将token放入到浏览器中
                         window.sessionStorage.setItem("user",JSON.stringify({name:this.param.name}));
                         this.$message.success('登录成功');
-                        this.$router.push('/user');
+                        this.$router.push('/One');
                       }
                     }).catch(rs=>function(){
                       this.$message.error('请输入账号和密码');
