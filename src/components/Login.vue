@@ -21,17 +21,72 @@
               <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
             </el-input>
           </el-form-item>
-          <div class="login-btn">
-            <el-button type="primary" @click="submitForm()">登录</el-button>
-          </div>
+          <el-row>
+              <div class="login-btn">
+                  <el-col :span="11">
+                    <el-button type="primary" @click="submitForm()">登录</el-button>
+                  </el-col >
+
+                  <el-col :span="11">
+                    <el-button type="primary" @click="addUser()">注册</el-button>
+                  </el-col>
+              </div>
+          </el-row>
           <p class="login-tips">Tips : 用户名和密码必填。</p>
         </el-form>
       </div>
+
+
+  <!--新增用户信息-->
+      <el-dialog title="用户信息注册" :visible.sync="registerUserHtml">
+        <el-form ref="form" :model="addUserForm" label-width="80px">
+
+          <input type="hidden" v-model="addUserForm.id">
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="账号" prop="name">
+                <el-input v-model="addUserForm.name"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="密码">
+                <el-input v-model="addUserForm.password" show-password></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="创建日期">
+                <div class="block">
+                  <el-date-picker
+                    v-model="addUserForm.createDate"
+                    align="right"
+                    type="date"
+                    placeholder="选择日期">
+                  </el-date-picker>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+
+
+          <el-row>
+          <el-form-item>
+            <el-button type="primary" @click="addUserFormSubmit">提交</el-button>
+            <el-button @click="registerUserHtml=false">取消</el-button>
+          </el-form-item>
+          </el-row>
+        </el-form>
+      </el-dialog>
+
+
+
     </div>
-
-
-
-
 </template>
 
 <script>
@@ -47,14 +102,37 @@
               name: [{ required: false, message: '请输入用户名', trigger: 'blur' }],
               password: [{ required: false, message: '请输入密码', trigger: 'blur' }],
             },
+
+            registerUserHtml: false,//注册用户的模板
+            addUserForm:{
+              name:"",
+              password:"",
+              crateDate:"",
+            },
+
           };
         },
-
             methods: {
+              //点击提交按钮
+              addUserFormSubmit:function () {
+                this.$ajax.post("http://192.168.1.35:8083/user/insertUser",this.$qs.stringify(this.addUserForm)).then(res=>{
+                  //debugger;
+                  this.registerUserHtml=false;
+                  this.$message.success("注册成功，快去登录吧");
+                }).catch(rs=>{
+                    this.$message.error("出现异常")
+                });
+              },
+              //点击注册按钮
+              addUser:function () {
+                this.addUserForm = {};
+                this.registerUserHtml=true;
+              },
+              /*登录提交按钮*/
               submitForm:function() {
                 this.$refs.login.validate(valid => {
                   if (valid) {
-                    this.$ajax.post("http://192.168.1.000:8080/api/login/login",this.$qs.stringify(this.param)).then(res=>{
+                    this.$ajax.post("http://192.168.1.35:8083/user/login",this.$qs.stringify(this.param)).then(res=>{
                       debugger;
                       if (res.data.data != "") {
                         debugger;

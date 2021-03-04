@@ -16,6 +16,10 @@ Vue.prototype.$qs=qs;
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+Vue.use(ElementUI, {
+  size: 'small'
+});
+
 new Vue({
   el: '#app',
   router,
