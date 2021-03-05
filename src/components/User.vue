@@ -131,7 +131,7 @@
             this.queryData(1);
           },
           queryData:function (page) {
-            this.$ajax.get("http://localhost:8082/api/log/queryDataB?page="+page+"&size="+this.size).then(res=>{
+            this.$ajax.get("http://localhost:8082/api/log/queryData?page="+page+"&size="+this.size).then(res=>{
               this.data=res.data.data;
               this.count = res.data.data.count;
             }).catch(rs=>{
